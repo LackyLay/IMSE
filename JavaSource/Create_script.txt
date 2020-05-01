@@ -1,0 +1,121 @@
+CREATE TABLE member (
+mem_id int AUTO_INCREMENT,
+nickname varchar(15) NOT NULL,
+country varchar(50),
+status varchar(50) DEFAULT 'guest',
+PRIMARY KEY(mem_id)
+);
+
+CREATE TABLE grape (
+grape_name varchar(100),
+food_paring varchar(50),
+acidity varchar(50) DEFAULT 'medium',
+PRIMARY KEY(grape_name)
+);
+
+CREATE TABLE winery (
+winery_name varchar(100),
+founder varchar(100),
+liters_of_wine int,
+PRIMARY KEY(winery_name)
+);
+
+CREATE TABLE country (
+country_name varchar(500),
+vineyard_area int,
+population int,
+PRIMARY KEY(country_name)
+);
+
+CREATE TABLE wine (
+wine_id int AUTO_INCREMENT,
+color varchar(100),
+vintage int,
+winery_name varchar(100),
+grape_name varchar(100),
+PRIMARY KEY(wine_id),
+FOREIGN KEY(winery_name) REFERENCES winery(winery_name ),
+FOREIGN KEY(grape_name) REFERENCES grape(grape_name)
+);
+
+CREATE TABLE review (
+review_id int AUTO_INCREMENT,
+points int NOT NULL,
+date_rev datetime NOT NULL,
+member_id int,
+wine_id int,
+PRIMARY KEY(review_id),
+FOREIGN KEY(member_id) REFERENCES member(mem_id),
+FOREIGN KEY(wine_id) REFERENCES wine(wine_id)
+                  ON DELETE CASCADE ,
+CHECK (points <= 100 and points > 0)
+);
+
+CREATE TABLE region (
+r_index int,
+m2 int,
+climate varchar(100),
+country_name varchar(500),
+PRIMARY KEY(r_index, country_name),
+FOREIGN KEY(country_name) REFERENCES country(country_name)
+);
+
+CREATE TABLE autochthon (
+tons int,
+export_tons int,
+grape_name varchar(100),
+country_name varchar(500),
+PRIMARY KEY(grape_name),
+FOREIGN KEY(grape_name)  REFERENCES grape(grape_name),
+FOREIGN KEY(country_name) REFERENCES country(country_name)
+);
+
+CREATE TABLE worldwide (
+tons int,
+export_tons int,
+grape_name varchar(100),
+PRIMARY KEY(grape_name),
+FOREIGN KEY(grape_name)  REFERENCES grape(grape_name)
+);
+
+CREATE TABLE follow (
+member_id1 int,
+member_id2 int,
+PRIMARY KEY(member_id1,member_id2),
+FOREIGN KEY(member_id1)  REFERENCES member(mem_id),
+FOREIGN KEY(member_id2)  REFERENCES member(mem_id)
+);
+
+CREATE TABLE want_try (
+member_id int,
+wine_id int,
+PRIMARY KEY(member_id, wine_id),
+FOREIGN KEY(member_id)  REFERENCES member(mem_id),
+FOREIGN KEY(wine_id)  REFERENCES wine(wine_id)
+);
+
+CREATE TABLE from_c (
+wine_id int,
+region_index int,
+country_name varchar(500),
+PRIMARY KEY(wine_id, region_index, country_name),
+FOREIGN KEY(wine_id)  REFERENCES wine(wine_id),
+    FOREIGN KEY(country_name, region_index)  REFERENCES region(country_name, r_index)
+);
+
+CREATE TABLE have (
+region_index int,
+grape_name varchar(100),
+country_name varchar(500),
+PRIMARY KEY(region_index, grape_name, country_name),
+FOREIGN KEY(country_name, region_index)  REFERENCES region(country_name, r_index),
+FOREIGN KEY(grape_name)  REFERENCES grape(grape_name)
+);
+
+CREATE TABLE grow (
+country_name varchar(500),
+grape_name varchar(100),
+PRIMARY KEY(country_name, grape_name),
+FOREIGN KEY(country_name) REFERENCES country(country_name),
+FOREIGN KEY(grape_name) REFERENCES worldwide(grape_name)
+);

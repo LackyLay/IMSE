@@ -1,0 +1,14 @@
+DROP TABLE grow;
+DROP TABLE have;
+DROP TABLE from_c;
+DROP TABLE want_try;
+DROP TABLE follow;
+DROP TABLE worldwide;
+DROP TABLE autochthon;
+DROP TABLE region;
+DROP TABLE review;
+DROP TABLE wine;
+DROP TABLE country;
+DROP TABLE winery;
+DROP TABLE grape;
+DROP TABLE member;
