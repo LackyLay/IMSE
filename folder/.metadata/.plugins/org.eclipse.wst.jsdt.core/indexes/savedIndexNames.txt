@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+D:\MAMP\htdocs\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+1815587320.index
+1018988733.index
+1532132438.index
+2533016106.index
+2594317945.index
+4165533760.index
