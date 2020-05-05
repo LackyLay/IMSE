@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 
 // Include DatabaseHelper.php file
 require_once('../DatabaseHelper.php');
@@ -38,7 +39,7 @@ $member_array = $database->selectFromMemberWhere($mem_id, $nickname, $country);
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     
@@ -183,6 +184,10 @@ $member_array = $database->selectFromMemberWhere($mem_id, $nickname, $country);
 
 <!-- Search result --> 
 <h2>Member Search Result:</h2>
+
+
+
+
 <table class="table table-bordered">
     <tr>
         <th>Mem_id</th>
@@ -195,68 +200,16 @@ $member_array = $database->selectFromMemberWhere($mem_id, $nickname, $country);
             <td><?php echo $member['nickname']; ?>  </td>
             <td><?php echo $member['country']; ?>  </td>
             
-            
-            
-            <!-- Desplaying detail button -->
             <td> 
-            	<button class = "btn btn-primary btn-lg" data-toggle = "modal" data-target ="#myModal">
-            	
-            	Details
-            	
-            	
-            	</button>
-            </td>
-             <td> 
-            	<button class = "btn btn-primary btn-lg" data-toggle = "modal" data-target ="#myModal">
-            	
-            	Follow
-            	
-            	
-            	</button>
-            </td>
-            
+            <button class = "btn btn-primary btn-lg" data-toggle = "modal" data-target ="#myModal" id=<?php echo $member['mem_id']; ?>" onclick="showDetails(this); showDetails2(this)">
+            Details
+            </button>
+            <a href="process.php?follow=<?php echo $member['mem_id']; ?> 
+            	class = "btn btn-info">Follow</a>
         </tr>
     <?php endforeach; ?>
+   
 </table>
-
-<!-- Modal -->
-<div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" aria-hidden = "true">
-   
-   <div class = "modal-dialog">
-      <div class = "modal-content">
-         
-         <div class = "modal-header">
-            <h4 class = "modal-title">
-               Customer Detail
-            </h4>
-
-            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
-               ×
-            </button>
-         </div>
-         
-         <div id = "modal-body">
-            Press ESC button to exit.
-         </div>
-         
-         <div class = "modal-footer">
-            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
-               OK
-            </button>
-         </div>
-         
-      </div><!-- /.modal-content -->
-   </div><!-- /.modal-dialog -->
-   
-</div><!-- /.modal -->
-
-Live Demo
-<h2>Example of creating Modals with Twitter Bootstrap</h2>
-
-<!-- Button trigger modal -->
-<button class = "btn btn-primary btn-lg" data-toggle = "modal" data-target = "#myModal">
-   Launch demo modal
-</button>
 
 <!-- Modal -->
 <div class = "modal fade" id = "myModal" tabindex = "-1" role = "dialog" 
@@ -276,23 +229,51 @@ Live Demo
          </div>
          
          <div class = "modal-body">
-            Add some text here
+            <p>Follows: <span id ="follow"></span></p>
+            <p>Wants to try: <span id ="try"></span></p>
+            
+            
+            
          </div>
          
-         <div class = "modal-footer">
-            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
-               Close
-            </button>
-            
-            <button type = "button" class = "btn btn-primary">
-               Submit changes
-            </button>
-         </div>
+        
          
       </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
   
 </div><!-- /.modal -->
+
+<script>
+function showDetails(button) {
+	var mem_id= button.id;
+	$.ajax({
+		url: "customer.php",
+		method: "GET",
+		data: {"mem_id": mem_id},
+		success: function(response) {
+			var customer = JSON.parse(response);
+
+			$("#follow").text(customer.member_id2);
+		}
+	});
+}
+function showDetails2(button) {
+	var mem_id= button.id;
+	$.ajax({
+		url: "customer2.php",
+		method: "GET",
+		data: {"mem_id": mem_id},
+		success: function(response) {
+			var customer2 = JSON.parse(response);
+
+			$("#try").text(customer2.wine_id);
+		}
+	});
+}
+
+</script>
+
+
 
 
 
